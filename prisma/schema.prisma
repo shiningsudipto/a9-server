@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  address   String
+  avatar    String
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Shop      Shop?
+  Order     Order[]
+  Review    Review[]
+  coupon    Coupon[]
+
+  @@map("user")
+}
+
+model Shop {
+  id          String     @id @default(uuid())
+  name        String
+  description String
+  logo        String
+  owner       User       @relation(fields: [ownerId], references: [id])
+  ownerId     String     @unique
+  status      ShopStatus @default(Active)
+  Product     Product[]
+  Order       Order[]
+
+  @@map("shop")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  price       Float
+  description String
+  stock       Int
+  category    String
+  images      String[]
+  shopId      String
+  shop        Shop     @relation(fields: [shopId], references: [id])
+
+  OrderItems OrderItem[]
+  Reviews    Review[]
+
+  @@map("product")
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  userId    String
+  shopId    String
+  total     Float
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+  user      User        @relation(fields: [userId], references: [id])
+  shop      Shop        @relation(fields: [shopId], references: [id])
+
+  @@map("order")
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("orderItem")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("review")
+}
+
+model Coupon {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  discount  Int
+  expDate   String
+  createdBy User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+
+  @@map("coupon")
+}
+
+enum UserRole {
+  ADMIN
+  VENDOR
+  USER
+}
+
+enum ShopStatus {
+  Suspend
+  Active
+}
