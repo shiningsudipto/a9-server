@@ -14,19 +14,20 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String     @unique
   password  String
   address   String
   avatar    String
   role      UserRole
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   Shop      Shop?
   Order     Order[]
   Review    Review[]
   coupon    Coupon[]
+  Follower  Follower[]
 
   @@map("user")
 }
@@ -41,8 +42,19 @@ model Shop {
   status      ShopStatus @default(Active)
   Product     Product[]
   Order       Order[]
+  Follower    Follower[]
 
   @@map("shop")
+}
+
+model Follower {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  shop   Shop   @relation(fields: [shopId], references: [id])
+  shopId String
+
+  @@unique([userId, shopId])
 }
 
 model Product {
