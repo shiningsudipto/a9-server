@@ -27,7 +27,7 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.bookId;
+  const id = req.body.id;
   const result = await userServices.deleteUserFromDB(id);
   sendResponse(res, {
     success: true,
