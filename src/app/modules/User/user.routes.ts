@@ -18,6 +18,7 @@ router.put(
   userControllers.updateUser
 );
 router.get("/all", userControllers.getAllUser);
+router.get("/:id", userControllers.getUserById);
 router.delete("/delete", userControllers.deleteUser);
 
 export const UserRoutes = router;

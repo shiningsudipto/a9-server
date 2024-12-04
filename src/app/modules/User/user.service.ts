@@ -46,6 +46,13 @@ const getAllUserFromDB = async () => {
   return result;
 };
 
+const getUserByIdFromDB = async (id: string) => {
+  const result = await prisma.user.findUnique({
+    where: { id },
+  });
+  return result;
+};
+
 const deleteUserFromDB = async (id: string) => {
   const result = await prisma.user.delete({
     where: {
@@ -60,4 +67,5 @@ export const userServices = {
   updateUserIntoDB,
   getAllUserFromDB,
   deleteUserFromDB,
+  getUserByIdFromDB,
 };
