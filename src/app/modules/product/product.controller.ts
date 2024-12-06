@@ -7,6 +7,7 @@ import pick from "../../shared/pick";
 import { productFilterableFields } from "../../constants/searchAndFilter";
 
 const createPost = catchAsync(async (req, res) => {
+  console.log(req.body);
   const result = await productServices.createProductIntoDB(req);
 
   sendResponse(res, {

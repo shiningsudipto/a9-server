@@ -32,6 +32,8 @@ const updateUserIntoDB = async (id: string, req: Request) => {
     ...(userAvatar ? { avatar: userAvatar } : {}),
   };
 
+  console.log(payload);
+
   const result = await prisma.user.update({
     where: {
       id,

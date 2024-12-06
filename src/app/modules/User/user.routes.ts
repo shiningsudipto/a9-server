@@ -12,7 +12,7 @@ router.post(
   userControllers.createUser
 );
 router.put(
-  "/update",
+  "/update/:id",
   multerUpload.single("avatar"),
   parseBody,
   userControllers.updateUser
