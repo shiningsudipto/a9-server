@@ -1,5 +1,6 @@
 import { Request } from "express";
 import prisma from "../../shared/prisma";
+import ApiError from "../../errors/ApiError";
 
 const createShopIntoDB = async (req: Request) => {
   const shopInfo = req.body;
@@ -11,7 +12,7 @@ const createShopIntoDB = async (req: Request) => {
   const result = await prisma.shop.create({
     data: payload,
   });
-  return "result";
+  return result;
 };
 
 const updateShopIntoDB = async (req: Request) => {
@@ -36,7 +37,15 @@ const getShopByVendorFromDB = async (id: string) => {
     where: {
       ownerId: id,
     },
+    include: {
+      Product: true,
+      Order: true,
+      Follower: true,
+    },
   });
+  if (!result) {
+    throw new ApiError(404, "Shop not found!");
+  }
   return result;
 };
 

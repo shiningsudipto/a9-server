@@ -24,6 +24,23 @@ const createProductIntoDB = async (req: Request) => {
   return result;
 };
 
+const updateProductIntoDB = async (req: Request) => {
+  const postInfo = req.body;
+  const files = req.files as TImageFiles;
+  const imagePaths = files?.images?.map((file: IFile) => file.path);
+  const payload = {
+    ...postInfo,
+    ...(imagePaths ? { images: imagePaths } : {}),
+  };
+  const result = await prisma.product.update({
+    where: {
+      id: postInfo.id,
+    },
+    data: payload,
+  });
+  return result;
+};
+
 const getAllProductsFromDB = async (
   filters: TProductFilters,
   options: TPaginationOptions
@@ -101,7 +118,28 @@ const getAllProductsFromDB = async (
   };
 };
 
+const getProductsByShop = async (id: string) => {
+  const result = await prisma.product.findMany({
+    where: {
+      shopId: id,
+    },
+  });
+  return result;
+};
+
+const deleteProductFromDB = async (id: string) => {
+  const result = await prisma.product.delete({
+    where: {
+      id: id,
+    },
+  });
+  return result;
+};
+
 export const productServices = {
   createProductIntoDB,
+  updateProductIntoDB,
   getAllProductsFromDB,
+  getProductsByShop,
+  deleteProductFromDB,
 };

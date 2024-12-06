@@ -11,6 +11,13 @@ router.post(
   parseBody,
   productControllers.createPost
 );
+router.put(
+  "/",
+  multerUpload.fields([{ name: "images" }]),
+  parseBody,
+  productControllers.updateProduct
+);
 router.get("/", productControllers.getProducts);
+router.delete("/", productControllers.deleteProduct);
 
 export const ProductRoutes = router;

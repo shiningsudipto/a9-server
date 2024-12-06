@@ -124,6 +124,14 @@ model Coupon {
   @@map("coupon")
 }
 
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  @@map("category")
+}
+
 enum UserRole {
   ADMIN
   VENDOR

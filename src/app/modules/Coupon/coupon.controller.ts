@@ -13,6 +13,7 @@ const createCoupon = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const getMatchedCoupon = catchAsync(async (req: Request, res: Response) => {
   const result = await couponServices.createCouponIntoDB(req);
   sendResponse(res, {
