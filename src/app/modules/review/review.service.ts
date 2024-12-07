@@ -18,7 +18,40 @@ const getReviewByProductFromDB = async (id: string) => {
   return result;
 };
 
+const getReviewsByShopOwnerIdFromDB = async (ownerId: string) => {
+  const reviews = await prisma.review.findMany({
+    where: {
+      product: {
+        shop: {
+          ownerId: ownerId,
+        },
+      },
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+      product: {
+        select: {
+          name: true,
+          shop: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return reviews;
+};
+
 export const reviewServices = {
   createReviewIntoDB,
   getReviewByProductFromDB,
+  getReviewsByShopOwnerIdFromDB,
 };

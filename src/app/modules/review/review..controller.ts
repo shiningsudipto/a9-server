@@ -25,7 +25,20 @@ const getReviewByProduct = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getReviewByShopOwner = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  console.log(id);
+  const result = await reviewServices.getReviewsByShopOwnerIdFromDB(id);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.CREATED,
+    message: "Review retrieved successfully",
+    data: result,
+  });
+});
+
 export const reviewControllers = {
   createReview,
   getReviewByProduct,
+  getReviewByShopOwner,
 };
