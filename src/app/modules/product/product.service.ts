@@ -24,13 +24,29 @@ const createProductIntoDB = async (req: Request) => {
   return result;
 };
 
+const duplicateProductIntoDB = async (req: Request) => {
+  const payload = req.body;
+  const result = await prisma.product.create({
+    data: payload,
+  });
+  return result;
+};
+
 const updateProductIntoDB = async (req: Request) => {
   const postInfo = req.body;
   const files = req.files as TImageFiles;
-  const imagePaths = files?.images?.map((file: IFile) => file.path);
+
+  const existingImages = postInfo.images || [];
+
+  const newImagePaths = files?.images?.length
+    ? files.images.map((file: IFile) => file.path)
+    : [];
+
+  const combinedImages = [...existingImages, ...newImagePaths];
+
   const payload = {
     ...postInfo,
-    ...(imagePaths ? { images: imagePaths } : {}),
+    ...(combinedImages.length > 0 && { images: combinedImages }),
   };
   const result = await prisma.product.update({
     where: {
@@ -142,4 +158,5 @@ export const productServices = {
   getAllProductsFromDB,
   getProductsByShop,
   deleteProductFromDB,
+  duplicateProductIntoDB,
 };

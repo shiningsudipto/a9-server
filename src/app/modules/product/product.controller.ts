@@ -7,13 +7,22 @@ import pick from "../../shared/pick";
 import { productFilterableFields } from "../../constants/searchAndFilter";
 
 const createPost = catchAsync(async (req, res) => {
-  console.log(req.body);
   const result = await productServices.createProductIntoDB(req);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Product created successfully",
+    data: result,
+  });
+});
+const duplicateProduct = catchAsync(async (req, res) => {
+  const result = await productServices.createProductIntoDB(req);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Product duplicated successfully",
     data: result,
   });
 });
@@ -60,4 +69,5 @@ export const productControllers = {
   updateProduct,
   getProducts,
   deleteProduct,
+  duplicateProduct,
 };

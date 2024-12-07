@@ -11,6 +11,7 @@ router.post(
   parseBody,
   productControllers.createPost
 );
+router.post("/duplicate", productControllers.duplicateProduct);
 router.put(
   "/",
   multerUpload.fields([{ name: "images" }]),
