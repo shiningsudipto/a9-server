@@ -15,8 +15,7 @@ const createPost = catchAsync(async (req, res) => {
 });
 
 const updateShop = catchAsync(async (req, res) => {
-  const payload = req.body;
-  const result = await shopServices.createShopIntoDB(payload);
+  const result = await shopServices.updateShopIntoDB(req);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

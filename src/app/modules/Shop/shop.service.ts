@@ -16,16 +16,16 @@ const createShopIntoDB = async (req: Request) => {
 };
 
 const updateShopIntoDB = async (req: Request) => {
-  const { id } = req.params;
   const shopInfo = req.body;
   const file = req.file?.path;
+  console.log(shopInfo);
   const payload = {
     ...shopInfo,
     ...(file ? { logo: file } : {}),
   };
   const result = await prisma.shop.update({
     where: {
-      id,
+      id: shopInfo.id,
     },
     data: payload,
   });
@@ -50,7 +50,11 @@ const getShopByVendorFromDB = async (id: string) => {
 };
 
 const getAllShopFromDB = async () => {
-  const result = await prisma.shop.findMany();
+  const result = await prisma.shop.findMany({
+    include: {
+      owner: true,
+    },
+  });
   return result;
 };
 
