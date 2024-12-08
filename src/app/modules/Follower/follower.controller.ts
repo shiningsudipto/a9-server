@@ -14,6 +14,16 @@ const createFollower = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const toggleFollow = catchAsync(async (req: Request, res: Response) => {
+  const result = followerService.toggleFollowUnFollowShopIntoDB(req);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.CREATED,
+    message: "Follow/Un-follow action done!",
+    data: result,
+  });
+});
+
 const getFollowerByShop = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = followerService.getFollowerByShopFromDB(id);
@@ -40,6 +50,7 @@ const getFollowingShopByUser = catchAsync(
 
 export const followerControllers = {
   createFollower,
+  toggleFollow,
   getFollowerByShop,
   getFollowingShopByUser,
 };

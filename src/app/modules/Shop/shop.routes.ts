@@ -19,5 +19,6 @@ router.put(
 );
 router.get("/", shopControllers.getAllShop);
 router.get("/:id", shopControllers.getShopByVendor);
+router.get("/details/:id", shopControllers.getShopByID);
 
 export const ShopRoutes = router;

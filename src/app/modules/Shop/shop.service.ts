@@ -49,6 +49,23 @@ const getShopByVendorFromDB = async (id: string) => {
   return result;
 };
 
+const getShopByIdFromDB = async (id: string) => {
+  const result = await prisma.shop.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      Product: true,
+      Order: true,
+      Follower: true,
+    },
+  });
+  if (!result) {
+    throw new ApiError(404, "Shop not found!");
+  }
+  return result;
+};
+
 const getAllShopFromDB = async () => {
   const result = await prisma.shop.findMany({
     include: {
@@ -63,4 +80,5 @@ export const shopServices = {
   updateShopIntoDB,
   getShopByVendorFromDB,
   getAllShopFromDB,
+  getShopByIdFromDB,
 };

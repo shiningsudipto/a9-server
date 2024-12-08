@@ -164,6 +164,18 @@ const getFlashSaleProductsFromDB = async () => {
   return result;
 };
 
+const getProductByIdFromDB = async (id: string) => {
+  const result = await prisma.product.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      shop: true,
+    },
+  });
+  return result;
+};
+
 export const productServices = {
   createProductIntoDB,
   updateProductIntoDB,
@@ -172,4 +184,5 @@ export const productServices = {
   deleteProductFromDB,
   duplicateProductIntoDB,
   getFlashSaleProductsFromDB,
+  getProductByIdFromDB,
 };

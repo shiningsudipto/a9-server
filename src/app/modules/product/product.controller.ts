@@ -49,6 +49,18 @@ const deleteProduct = catchAsync(async (req, res) => {
   });
 });
 
+const getProductById = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await productServices.getProductByIdFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Product retrieved successfully",
+    data: result,
+  });
+});
+
 const getFlashSaleProduct = catchAsync(async (req, res) => {
   const result = await productServices.getFlashSaleProductsFromDB();
 
@@ -82,4 +94,5 @@ export const productControllers = {
   getFlashSaleProduct,
   deleteProduct,
   duplicateProduct,
+  getProductById,
 };
