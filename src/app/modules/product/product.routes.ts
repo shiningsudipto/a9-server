@@ -19,6 +19,7 @@ router.put(
   productControllers.updateProduct
 );
 router.get("/", productControllers.getProducts);
+router.get("/flash-sale", productControllers.getFlashSaleProduct);
 router.delete("/", productControllers.deleteProduct);
 
 export const ProductRoutes = router;

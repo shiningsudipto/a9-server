@@ -152,6 +152,18 @@ const deleteProductFromDB = async (id: string) => {
   return result;
 };
 
+const getFlashSaleProductsFromDB = async () => {
+  const result = await prisma.product.findMany({
+    where: {
+      flashSale: true,
+    },
+    include: {
+      shop: true,
+    },
+  });
+  return result;
+};
+
 export const productServices = {
   createProductIntoDB,
   updateProductIntoDB,
@@ -159,4 +171,5 @@ export const productServices = {
   getProductsByShop,
   deleteProductFromDB,
   duplicateProductIntoDB,
+  getFlashSaleProductsFromDB,
 };
