@@ -21,6 +21,7 @@ router.put(
 router.get("/", productControllers.getProducts);
 router.get("/flash-sale", productControllers.getFlashSaleProduct);
 router.get("/:id", productControllers.getProductById);
+router.get("/category/:category", productControllers.getProductByCategory);
 router.delete("/", productControllers.deleteProduct);
 
 export const ProductRoutes = router;

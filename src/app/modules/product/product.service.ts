@@ -171,6 +171,19 @@ const getProductByIdFromDB = async (id: string) => {
     },
     include: {
       shop: true,
+      Reviews: true,
+    },
+  });
+  return result;
+};
+
+const getProductByCategoryFromDB = async (category: string) => {
+  const result = await prisma.product.findMany({
+    where: {
+      category: {
+        equals: category,
+        mode: "insensitive",
+      },
     },
   });
   return result;
@@ -185,4 +198,5 @@ export const productServices = {
   duplicateProductIntoDB,
   getFlashSaleProductsFromDB,
   getProductByIdFromDB,
+  getProductByCategoryFromDB,
 };

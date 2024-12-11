@@ -61,6 +61,19 @@ const getProductById = catchAsync(async (req, res) => {
   });
 });
 
+const getProductByCategory = catchAsync(async (req, res) => {
+  const { category } = req.params;
+  console.log(category);
+  const result = await productServices.getProductByCategoryFromDB(category);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Product retrieved successfully",
+    data: result,
+  });
+});
+
 const getFlashSaleProduct = catchAsync(async (req, res) => {
   const result = await productServices.getFlashSaleProductsFromDB();
 
@@ -95,4 +108,5 @@ export const productControllers = {
   deleteProduct,
   duplicateProduct,
   getProductById,
+  getProductByCategory,
 };
