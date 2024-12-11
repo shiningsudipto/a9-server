@@ -18,6 +18,26 @@ const getReviewByProductFromDB = async (id: string) => {
   return result;
 };
 
+const getReviewByUserFromDB = async (id: string) => {
+  const result = await prisma.review.findMany({
+    where: {
+      userId: id,
+    },
+  });
+  return result;
+};
+
+const updateReviewIntoDB = async (req: Request) => {
+  const payload = req.body;
+  const result = await prisma.review.update({
+    where: {
+      id: payload.id,
+    },
+    data: payload,
+  });
+  return result;
+};
+
 const getReviewsByShopOwnerIdFromDB = async (ownerId: string) => {
   const reviews = await prisma.review.findMany({
     where: {
@@ -54,4 +74,6 @@ export const reviewServices = {
   createReviewIntoDB,
   getReviewByProductFromDB,
   getReviewsByShopOwnerIdFromDB,
+  getReviewByUserFromDB,
+  updateReviewIntoDB,
 };
