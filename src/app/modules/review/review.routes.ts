@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/", reviewControllers.createReview);
 router.get("/:id", reviewControllers.getReviewByProduct);
-router.post("/update", reviewControllers.updateReview);
+router.put("/", reviewControllers.updateReview);
 router.get("/user/:id", reviewControllers.getReviewByUser);
 router.get("/shop-owner/:id", reviewControllers.getReviewByShopOwner);
 

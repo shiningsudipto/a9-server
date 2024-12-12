@@ -68,7 +68,46 @@ const forgetPasswordIntoDB = async (email: string) => {
   return "Reset link sent to your email";
 };
 
+const resetPasswordIntoDB = async (
+  id: string,
+  newPassword: string,
+  token: string | undefined
+) => {
+  const findUser = await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  if (!token) {
+    throw new ApiError(400, "Token is required");
+  }
+
+  const decoded = jwt.verify(
+    token,
+    config.jwt.jwt_secret as string
+  ) as JwtPayload;
+
+  if (decoded.id !== findUser.id) {
+    throw new ApiError(401, "Invalid token");
+  }
+
+  const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+  await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+
+  return "Password reset successfully";
+};
+
 export const authServices = {
   loginUserService,
   forgetPasswordIntoDB,
+  resetPasswordIntoDB,
 };
