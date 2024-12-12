@@ -78,12 +78,22 @@ model Product {
   @@map("product")
 }
 
+model Payment {
+  id            String      @id @default(uuid())
+  orderId       String
+  transactionId String
+  amount        Float
+  status        OrderStatus @default(Pending)
+  createdAt     DateTime    @default(now())
+}
+
 model Order {
   id            String      @id @default(uuid())
   userId        String
   shopId        String
   total         Float
-  transactionId String
+  status        OrderStatus @default(Pending)
+  transactionId String?
   createdAt     DateTime    @default(now())
   items         OrderItem[]
   user          User        @relation(fields: [userId], references: [id])
@@ -150,4 +160,9 @@ enum UserRole {
 enum ShopStatus {
   Suspend
   Active
+}
+
+enum OrderStatus {
+  Complete
+  Pending
 }

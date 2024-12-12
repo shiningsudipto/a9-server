@@ -16,4 +16,12 @@ export default {
     email: process.env.EMAIL,
     app_pass: process.env.APP_PASS,
   },
+  payment: {
+    payment_url: process.env.PAYMENT_URL,
+    payment_verify_url: process.env.PAYMENT_VERIFY_URL,
+    store_id: process.env.STORE_ID,
+    signature_key: process.env.SIGNATURE_KEY,
+  },
+  client_url: process.env.CLIENT_URL,
+  live_url: process.env.LIVE_URL,
 };

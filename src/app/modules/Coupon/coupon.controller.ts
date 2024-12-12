@@ -15,7 +15,7 @@ const createCoupon = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getMatchedCoupon = catchAsync(async (req: Request, res: Response) => {
-  const result = await couponServices.createCouponIntoDB(req);
+  const result = await couponServices.getMatchedCouponFromDB(req);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

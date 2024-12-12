@@ -1,5 +1,6 @@
 import { Request } from "express";
 import prisma from "../../shared/prisma";
+import ApiError from "../../errors/ApiError";
 
 const createCouponIntoDB = async (req: Request) => {
   const payload = req.body;
@@ -22,9 +23,9 @@ const getMatchedCouponFromDB = async (req: Request) => {
     },
   });
   if (result) {
-    return true;
+    return result;
   } else {
-    return false;
+    throw new ApiError(404, "Coupon not found!");
   }
 };
 
