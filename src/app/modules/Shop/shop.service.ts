@@ -19,7 +19,6 @@ const createShopIntoDB = async (req: Request) => {
 const updateShopIntoDB = async (req: Request) => {
   const shopInfo = req.body;
   const file = req.file?.path;
-  console.log(shopInfo);
   const payload = {
     ...shopInfo,
     ...(file ? { logo: file } : {}),

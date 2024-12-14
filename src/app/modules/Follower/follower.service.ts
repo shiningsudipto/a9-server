@@ -12,8 +12,6 @@ const createFollowerIntoDB = async (req: Request) => {
 const toggleFollowUnFollowShopIntoDB = async (req: Request) => {
   const { shopId, userId } = req.body;
 
-  console.log(req.body);
-
   const existingFollower = await prisma.follower.findUnique({
     where: {
       userId_shopId: {

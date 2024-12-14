@@ -1,16 +1,12 @@
-# Library Management System
-
-## Project Name & Description
-
-The **Library Management System** is a RESTful API designed to manage books, members, and borrowing records for a library. This API provides an efficient way to track books, manage members, and monitor borrowed books and overdue returns.
+# ElectroHub - e-commerce
 
 ## Live URL
 
-The backend of this project is deployed and can be accessed [here](https://library-management-system-eight-zeta.vercel.app).
+The backend of this project is deployed and can be accessed [here](https://electro-hub-one.vercel.app).
 
 ## Technology Stack & Packages
 
-- **Backend Framework**: Node.js, Express.js
+- **Backend Framework**: Node.js, Express.js, PostgreSQL, Prisma
 - **Database**: PostgreSQL (with Prisma ORM)
 - **Language**: TypeScript
 - **Validation**: Zod
@@ -22,6 +18,16 @@ The backend of this project is deployed and can be accessed [here](https://libra
 - **Zod**: For schema validation
 - **Express**: Server and API handling
 - **Typescript**: Type safety and development
+
+### Key Features
+
+- **Admin Management**
+- **Vendor Management**
+- **User Management**
+- **Searching, Sorting**
+- **Authentication**
+- **Authorization**
+- **Payment**
 
 ## Setup Instructions
 
@@ -41,7 +47,27 @@ The backend of this project is deployed and can be accessed [here](https://libra
 4. **Create '.env' file at the root**:
 5. **Setup environment variables**:
    ```
-   DATABASE_URL=
+   DATABASE_URL
+   NODE_ENV
+   PORT
+   JWT_SECRET
+   EXPIRES_IN
+   REFRESH_TOKEN_SECRET
+   REFRESH_TOKEN_EXPIRES_IN
+   RESET_PASS_TOKEN
+   RESET_PASS_TOKEN_EXPIRES_IN
+   RESET_PASS_LINK
+   EMAIL
+   APP_PASS
+   PAYMENT_URL
+   PAYMENT_VERIFY_URL
+   STORE_ID
+   SIGNATURE_KEY
+   CLIENT_URL
+   LIVE_URL
+   CLOUDINARY_CLOUD_NAME
+   CLOUDINARY_API_KEY
+   CLOUDINARY_API_SECRET
    ```
 6. **Run project**:
    ```

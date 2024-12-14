@@ -48,7 +48,6 @@ const getReviewByUser = catchAsync(async (req: Request, res: Response) => {
 
 const getReviewByShopOwner = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log(id);
   const result = await reviewServices.getReviewsByShopOwnerIdFromDB(id);
   sendResponse(res, {
     success: true,

@@ -17,7 +17,6 @@ const createProductIntoDB = async (req: Request) => {
     ...postInfo,
     images: imagePaths,
   };
-  console.log({ payload });
   const result = await prisma.product.create({
     data: payload,
   });
