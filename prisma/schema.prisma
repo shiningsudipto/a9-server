@@ -109,6 +109,7 @@ model OrderItem {
   userId    String
   quantity  Int
   price     Float
+  reviewed  Boolean @default(false)
   order     Order   @relation(fields: [orderId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
   user      User    @relation(fields: [userId], references: [id])
@@ -127,7 +128,7 @@ model Review {
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
 
-  @@unique([userId, productId]) // Unique constraint on userId and productId
+  // @@unique([userId, productId]) // Unique constraint on userId and productId
   @@map("review")
 }
 

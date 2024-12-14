@@ -103,9 +103,6 @@ const getAllProductsFromDB = async (
   const whereConditions: Prisma.ProductWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
-  // Log the constructed where conditions for debugging
-  // console.log("Where Conditions:", whereConditions);
-
   // Handle sorting
   const orderBy = sortBy
     ? { [sortBy]: sortOrder === "desc" ? "desc" : "asc" }
@@ -189,6 +186,30 @@ const getProductByCategoryFromDB = async (category: string) => {
   return result;
 };
 
+const getProductsFromFollowingShopsFromDB = async (userId: string) => {
+  const result = await prisma.product.findMany({
+    where: {
+      shop: {
+        Follower: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+    },
+    include: {
+      shop: {
+        select: {
+          name: true,
+          logo: true,
+        },
+      },
+    },
+  });
+
+  return result;
+};
+
 export const productServices = {
   createProductIntoDB,
   updateProductIntoDB,
@@ -199,4 +220,5 @@ export const productServices = {
   getFlashSaleProductsFromDB,
   getProductByIdFromDB,
   getProductByCategoryFromDB,
+  getProductsFromFollowingShopsFromDB,
 };

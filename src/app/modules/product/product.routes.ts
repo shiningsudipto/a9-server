@@ -19,6 +19,10 @@ router.put(
   productControllers.updateProduct
 );
 router.get("/", productControllers.getProducts);
+router.get(
+  "/from-following-shops/:id",
+  productControllers.getProductByUserFollowing
+);
 router.get("/flash-sale", productControllers.getFlashSaleProduct);
 router.get("/:id", productControllers.getProductById);
 router.get("/category/:category", productControllers.getProductByCategory);

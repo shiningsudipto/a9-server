@@ -1,6 +1,7 @@
 import { Request } from "express";
 import prisma from "../../shared/prisma";
 import ApiError from "../../errors/ApiError";
+import { TPaginationQuery } from "../Order/order.service";
 
 const createShopIntoDB = async (req: Request) => {
   const shopInfo = req.body;
@@ -32,21 +33,47 @@ const updateShopIntoDB = async (req: Request) => {
   return result;
 };
 
-const getShopByVendorFromDB = async (id: string) => {
+const getShopByVendorFromDB = async (
+  id: string,
+  { limit, page }: TPaginationQuery
+) => {
+  const skip = (page - 1) * limit;
+
   const result = await prisma.shop.findUnique({
     where: {
       ownerId: id,
     },
     include: {
-      Product: true,
+      Product: {
+        skip: skip, // Offset for pagination
+        take: limit, // Limit per page
+      },
       Order: true,
       Follower: true,
     },
   });
+
   if (!result) {
     throw new ApiError(404, "Shop not found!");
   }
-  return result;
+
+  // Get total count of products for pagination meta
+  const totalProducts = await prisma.product.count({
+    where: {
+      shopId: result.id,
+    },
+  });
+
+  return {
+    shop: result,
+    products: result.Product, // Paginated products
+    meta: {
+      total: totalProducts,
+      page: page,
+      limit: limit,
+      totalPages: Math.ceil(totalProducts / limit),
+    },
+  };
 };
 
 const getShopByIdFromDB = async (id: string) => {

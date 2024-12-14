@@ -2,6 +2,7 @@ import { Request } from "express";
 import prisma from "../../shared/prisma";
 import { initiatePayment } from "../payment/payment.utils";
 import { TPaymentInfo } from "../payment/paymentinterface";
+import { OrderStatus } from "@prisma/client";
 
 interface TItems {
   productId: string;
@@ -27,7 +28,7 @@ const createOrderIntoDB = async (req: Request) => {
       data: {
         userId,
         shopId,
-        total,
+        total: parseFloat(total),
         transactionId,
         items: {
           create: items?.map((item: TItems) => ({
@@ -60,59 +61,85 @@ const createOrderIntoDB = async (req: Request) => {
   return result;
 };
 
-const getOrdersFromDB = async (query: Record<string, any>) => {
-  const orderQuery = buildPrismaQuery({
-    searchFields: ["status"],
-    searchTerm: query.searchTerm,
-    filter: query.filter && JSON.parse(query.filter),
-    orderBy: query.orderBy && JSON.parse(query.orderBy),
-    page: query.page,
-    limit: query.limit,
-  });
-
-  const totalOrders = await prisma.order.count({
-    where: orderQuery.where,
-  });
-
-  const totalPages = Math.ceil(totalOrders / orderQuery.take);
-
+const getOrderByUserIdFromDB = async (id: string) => {
   const result = await prisma.order.findMany({
-    ...orderQuery,
-    include: {
-      orderItem: true,
-      user: true,
-      shop: true,
-      shippingAddress: true,
-    },
-  });
-
-  return {
-    meta: {
-      total: totalOrders,
-      limit: orderQuery.take,
-      page: totalPages,
-    },
-    result,
-  };
-};
-
-const getOrderByUserIdFromDB = async (query: Record<string, any>) => {
-  const result = await prisma.order.findFirst({
     where: {
-      userId: query.userId,
-      orderItem: {
-        some: {
-          productId: query.productId,
+      userId: id,
+      status: OrderStatus.Complete,
+    },
+    include: {
+      items: {
+        include: {
+          product: true,
         },
       },
     },
   });
+  return result;
+};
 
+export interface TPaginationQuery {
+  limit: number;
+  page: number;
+}
+
+const getOrderByShopOwnerIdFromDB = async (
+  ownerId: string,
+  { limit, page }: TPaginationQuery
+) => {
+  const skip = (page - 1) * limit; // Calculate the number of records to skip
+
+  const result = await prisma.order.findMany({
+    where: {
+      shop: {
+        ownerId: ownerId,
+      },
+      status: OrderStatus.Complete,
+    },
+    include: {
+      user: true,
+    },
+    take: limit, // Limit the number of results per page
+    skip: skip, // Skip records for pagination
+  });
+
+  // Optional: Count total orders for this query
+  const total = await prisma.order.count({
+    where: {
+      shop: {
+        ownerId: ownerId,
+      },
+      status: OrderStatus.Complete,
+    },
+  });
+
+  return {
+    data: result,
+    meta: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
+};
+
+const getAllOrdersFromDB = async () => {
+  const result = await prisma.order.findMany({
+    where: {
+      status: OrderStatus.Complete,
+    },
+    include: {
+      items: true,
+      user: true,
+    },
+  });
   return result;
 };
 
 export const OrderService = {
   createOrderIntoDB,
-  getOrdersFromDB,
   getOrderByUserIdFromDB,
+  getOrderByShopOwnerIdFromDB,
+  getAllOrdersFromDB,
 };

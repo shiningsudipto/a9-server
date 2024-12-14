@@ -27,7 +27,12 @@ const updateShop = catchAsync(async (req, res) => {
 
 const getShopByVendor = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await shopServices.getShopByVendorFromDB(id);
+  const limit = parseInt(req.query.limit as string) || 20; // Default limit: 20
+  const page = parseInt(req.query.page as string) || 1; // Default page: 1
+  const result = await shopServices.getShopByVendorFromDB(id, {
+    limit,
+    page,
+  });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

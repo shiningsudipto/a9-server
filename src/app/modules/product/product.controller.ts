@@ -63,8 +63,19 @@ const getProductById = catchAsync(async (req, res) => {
 
 const getProductByCategory = catchAsync(async (req, res) => {
   const { category } = req.params;
-  console.log(category);
   const result = await productServices.getProductByCategoryFromDB(category);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Product retrieved successfully",
+    data: result,
+  });
+});
+
+const getProductByUserFollowing = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await productServices.getProductsFromFollowingShopsFromDB(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -109,4 +120,5 @@ export const productControllers = {
   duplicateProduct,
   getProductById,
   getProductByCategory,
+  getProductByUserFollowing,
 };

@@ -106,8 +106,44 @@ const resetPasswordIntoDB = async (
   return "Password reset successfully";
 };
 
+const changePasswordIntDB = async (
+  email: string,
+  oldPassword: string,
+  newPassword: string
+) => {
+  const findUser = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!findUser) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const isPasswordMatch = bcrypt.compareSync(oldPassword, findUser.password);
+
+  if (!isPasswordMatch) {
+    throw new ApiError(404, "Invalid password");
+  }
+
+  const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+  await prisma.user.update({
+    where: {
+      email,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+
+  return "Password changed successfully";
+};
+
 export const authServices = {
   loginUserService,
   forgetPasswordIntoDB,
   resetPasswordIntoDB,
+  changePasswordIntDB,
 };

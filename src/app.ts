@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 
 const app: Application = express();
-app.use(cors());
 
 // middlewares
 app.use(
@@ -18,13 +17,12 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get("/", (req: Request, res: Response) => {
   res.send({
-    Message: "Library management server...",
+    Message: "ElectroHub server running...",
   });
 });
 

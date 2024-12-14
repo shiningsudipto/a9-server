@@ -3,8 +3,22 @@ import prisma from "../../shared/prisma";
 
 const createReviewIntoDB = async (req: Request) => {
   const payload = req.body;
+  const reviewData = {
+    userId: payload.userId,
+    productId: payload.productId,
+    rating: payload.rating,
+    comment: payload.comment,
+  };
   const result = await prisma.review.create({
-    data: payload,
+    data: reviewData,
+  });
+  await prisma.orderItem.update({
+    where: {
+      id: payload.orderId,
+    },
+    data: {
+      reviewed: true,
+    },
   });
   return result;
 };

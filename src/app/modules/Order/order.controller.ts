@@ -14,6 +14,51 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getOrderByUserId = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await OrderService.getOrderByUserIdFromDB(id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Order retrieved successfully",
+    data: result,
+  });
+});
+
+const getOrdersByShopOwnerId = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const limit = parseInt(req.query.limit as string) || 10; // Default limit: 10
+    const page = parseInt(req.query.page as string) || 1; // Default page: 1
+    const result = await OrderService.getOrderByShopOwnerIdFromDB(id, {
+      limit,
+      page,
+    });
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Order retrieved successfully",
+      data: result,
+    });
+  }
+);
+
+const getAllOrders = catchAsync(async (req: Request, res: Response) => {
+  const result = await OrderService.getAllOrdersFromDB();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Order retrieved successfully",
+    data: result,
+  });
+});
+
 export const OrderController = {
   createOrder,
+  getAllOrders,
+  getOrderByUserId,
+  getOrdersByShopOwnerId,
 };
