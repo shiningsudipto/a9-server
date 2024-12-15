@@ -6,6 +6,7 @@ import * as bcrypt from "bcrypt";
 import ApiError from "../../errors/ApiError";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { sendEmail } from "../../utils/sendEmail";
+import { ShopStatus } from "@prisma/client";
 
 const loginUserService = async (payload: {
   email: string;
@@ -14,6 +15,7 @@ const loginUserService = async (payload: {
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
       email: payload.email,
+      status: ShopStatus.Active,
     },
   });
 

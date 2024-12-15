@@ -2,7 +2,7 @@ import { Request } from "express";
 import { IFile, TImageFiles } from "../../types/file";
 import prisma from "../../shared/prisma";
 import { paginationHelper } from "../../../helpers/paginationHelper";
-import { Prisma } from "@prisma/client";
+import { Prisma, ShopStatus } from "@prisma/client";
 import { productSearchableFields } from "../../constants/searchAndFilter";
 import {
   TPaginationOptions,
@@ -98,6 +98,12 @@ const getAllProductsFromDB = async (
     andConditions.push(...filterConditions);
   }
 
+  andConditions.push({
+    shop: {
+      status: ShopStatus.Active,
+    },
+  });
+
   // Combine all conditions into a single where clause
   const whereConditions: Prisma.ProductWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
@@ -152,6 +158,9 @@ const getFlashSaleProductsFromDB = async () => {
   const result = await prisma.product.findMany({
     where: {
       flashSale: true,
+      shop: {
+        status: ShopStatus.Active,
+      },
     },
     include: {
       shop: true,
@@ -189,6 +198,7 @@ const getProductsFromFollowingShopsFromDB = async (userId: string) => {
   const result = await prisma.product.findMany({
     where: {
       shop: {
+        status: ShopStatus.Active,
         Follower: {
           some: {
             userId: userId,
